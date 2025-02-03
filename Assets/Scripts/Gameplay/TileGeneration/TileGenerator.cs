@@ -14,7 +14,7 @@ namespace Gameplay.TileGeneration
         private List<CityTile> _tiles = new List<CityTile>();
         private int _lastTileId = 0;
 
-        public void RestoreOrderOnRotation()
+        public void onRotation()
         {
             if (_tiles.Count < 4)
             {
@@ -39,11 +39,11 @@ namespace Gameplay.TileGeneration
             while (_tiles.Count > 4)
             {
                 Debug.Log($"tiles count befor destroy = {_tiles.Count}");
-                DestroyPastTile();
+                DestroyLastTile();
             }
         }
 
-        private void DestroyPastTile()
+        private void DestroyLastTile()
         {
             var tile = _tiles.First();
             _tiles.Remove(tile);

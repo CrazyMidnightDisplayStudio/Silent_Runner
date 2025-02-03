@@ -28,7 +28,7 @@ namespace Gameplay.City
             if (IsRotating) return;
 
             IsRotating = true;
-            _tileGenerator.RestoreOrderOnRotation();
+            _tileGenerator.onRotation();
             await _rotator.RotateToAngleTask(transform, CityRoot.RotateDirection, 1f);
             IsRotating = false;
         }
