@@ -1,8 +1,8 @@
-﻿namespace Gameplay.Utils
+﻿namespace Gameplay.GameSpeed
 {
     public class SpeedController
     {
-        public float Speed { get; set; }
+        public static float Speed { get; private set; } = 2.5f;
 
         public SpeedController(float speed)
         {

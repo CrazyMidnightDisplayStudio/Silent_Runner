@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
+﻿using Gameplay.GameSpeed;
 using Gameplay.TileGeneration;
 using Gameplay.Utils;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Gameplay.City
 {
@@ -11,7 +9,6 @@ namespace Gameplay.City
     {
         [SerializeField] private TileGenerator _tileGenerator;
 
-        private SpeedController _speedController = new SpeedController(2.5f);
         private RotateObject _rotator = new RotateObject();
         public static bool IsRotating { get; private set; } = false;
 
@@ -19,7 +16,7 @@ namespace Gameplay.City
         {
             foreach (var tile in _tileGenerator.Tiles)
             {
-                tile.Move(_speedController.Speed);
+                tile.MoveInFixedUpdate(SpeedController.Speed);
             }
         }
 
