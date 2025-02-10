@@ -1,7 +1,7 @@
-﻿using System;
-using Gameplay.City;
+﻿using Gameplay.City;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Zenject;
 
 namespace Gameplay
 {
@@ -9,6 +9,13 @@ namespace Gameplay
     {
         [SerializeField] private CityMover _cityMover;
         private PlayerInputActions _controls;
+        private TileTracker _tileTracker;
+
+        [Inject]
+        private void Init(TileTracker tileTracker)
+        {
+            _tileTracker = tileTracker;
+        }
 
         private void Awake()
         {
@@ -28,8 +35,13 @@ namespace Gameplay
         }
         private void OnRotate(InputAction.CallbackContext context)
         {
-            Debug.Log("Rotate");
-            _cityMover.Rotate();
+            if (_tileTracker.ProgressInTile < 0.7f)
+            {
+                Debug.Log("Early turn blocked");
+                return;
+            }
+            _tileTracker.SubscribeToProgress(0.9f, _cityMover.Rotate, true, true);
+            Debug.Log("Rotate callback registered");
         }
     }
 }
