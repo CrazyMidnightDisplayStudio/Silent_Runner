@@ -18,8 +18,8 @@ namespace Gameplay.Jump
         private bool isGround = false;
         [SerializeField] private float _radius = 3;
         [SerializeField] LayerMask _groundLayer;
-        public float LastPressedJumpTime { get; private set; } // время касания земли нужно для буфферизации прыжка
-        public float LastOnGroundTime { get; private set; } // время кайота
+        public float LastPressedJumpTime { get; private set; } // РІСЂРµРјСЏ РєР°СЃР°РЅРёСЏ Р·РµРјР»Рё, РЅСѓР¶РЅРѕ РґР»СЏ Р±СѓС„С„РµСЂРёР·Р°С†РёРё РїСЂС‹Р¶РєР° ,РµСЃР»Рё РёРіСЂРѕРє РЅР°Р¶Р°Р» С‡СѓС‚СЊ СЂР°РЅСЊС€Рµ С‡РµРј РёРіСЂРѕРє РєР°СЃРЅСѓР»СЃСЏ С‚СЂРёРіРµСЂРѕРј Р·РµРјР»Рё
+        public float LastOnGroundTime { get; private set; } // РІСЂРµРјСЏ РєР°Р№РѕС‚Р°
         private IJumpInput _jumpInput;
         private PlayerInputActions _playerInputActions;
 
@@ -31,7 +31,7 @@ namespace Gameplay.Jump
         void Start()
         {
             rb = GetComponent<Rigidbody>();
-            IsGravity(false); // выключаем базовую гравитацию для объекта
+            IsGravity(false); // РІСЂРµРјСЏ РєР°СЃР°РЅРёСЏ Р·РµРјР»Рё РЅСѓР¶РЅРѕ РґР»СЏ Р±СѓС„С„РµСЂРёР·Р°С†РёРё РїСЂС‹Р¶РєР°
             _jumpInput.StartJump += () => StartJump();
             _jumpInput.CancelJump += () => CancelJump();
         }
@@ -50,13 +50,11 @@ namespace Gameplay.Jump
 
         private void StartJump()
         {
-            Debug.Log("START");
             OnJump();
             isPressButton = true;
         }
         private void CancelJump()
         {
-            Debug.Log("CANCEL");
             isPressButton = false;
             _isJumpCut = CanJumpCut();
         }
@@ -84,7 +82,6 @@ namespace Gameplay.Jump
         }
         private void Jump()
         {
-            Debug.Log("Jump");
             _isJumping = true;
             LastPressedJumpTime = 0;
             LastOnGroundTime = 0;
@@ -111,17 +108,14 @@ namespace Gameplay.Jump
             float gravity = _jumpData.gravityStrength;
             if (_isJumpCut)
             {
-                Debug.Log("Jump Cut");
                 rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y * _jumpData.jumpCutGravityScale, 0);
             }
             else if (Math.Abs(rb.velocity.y) < _jumpData.jumpHangGravityMult && isPressButton && (_isJumping || _isFalling))
             {
-                Debug.Log("Jump Hang");
                 gravity = _jumpData.gravityStrength - _jumpData.gravityStrength * _jumpData.jumpHangGravityMult;
             }
             else if (rb.velocity.y < 0)
             {
-                Debug.Log("Jump Fall");
                 gravity = _jumpData.gravityStrength + _jumpData.gravityStrength * _jumpData.fallGravityScale;
             }
             rb.velocity += new Vector3(0, gravity * Time.fixedDeltaTime, 0);
