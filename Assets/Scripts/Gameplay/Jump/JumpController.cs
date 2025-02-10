@@ -1,6 +1,6 @@
 using System;
-using Assets.Scripts.Gameplay.InputJump.Installer;
 using UnityEngine;
+using UnityEngine.Windows;
 using Zenject;
 
 namespace Gameplay.Jump
@@ -20,23 +20,21 @@ namespace Gameplay.Jump
         [SerializeField] LayerMask _groundLayer;
         public float LastPressedJumpTime { get; private set; } // время касания земли, нужно для буфферизации прыжка ,если игрок нажал чуть раньше чем игрок каснулся тригером земли
         public float LastOnGroundTime { get; private set; } // время кайота
-        private IJumpInput _jumpInput;
         private PlayerInputActions _playerInputActions;
+        private PlayerInputActions _inputs;
 
         [Inject]
-        public void Construct(IJumpInput jumpInput)
+        public void Construct(PlayerInputActions inputs)
         {
-            _jumpInput = jumpInput;
+            _inputs = inputs;
         }
         void Start()
         {
             rb = GetComponent<Rigidbody>();
             IsGravity(false); // время касания земли нужно для буфферизации прыжка
-            _jumpInput.StartJump += () => StartJump();
-            _jumpInput.CancelJump += () => CancelJump();
+            SubscibeInput();
         }
 
-        // Update is called once per frame
         void Update()
         {
             LastPressedJumpTime -= Time.deltaTime;
@@ -126,10 +124,19 @@ namespace Gameplay.Jump
             Gizmos.color = Color.blue;
             Gizmos.DrawSphere(_groundCheckPoint.position, _radius);
         }
+        private void SubscibeInput()
+        {
+            _inputs.Gameplay.Jump.started += _ => StartJump();
+            _inputs.Gameplay.Jump.canceled += _ => CancelJump();
+        }
+        private void UnsubscibeInput()
+        {
+            _inputs.Gameplay.Jump.started -= _ => StartJump();
+            _inputs.Gameplay.Jump.canceled -= _ => CancelJump();
+        }
         private void OnDestroy()
         {
-            _jumpInput.StartJump -= () => StartJump();
-            _jumpInput.CancelJump -= () => CancelJump();
+            UnsubscibeInput();
         }
     }
 }
