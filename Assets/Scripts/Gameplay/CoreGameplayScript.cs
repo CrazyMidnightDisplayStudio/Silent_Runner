@@ -8,30 +8,26 @@ namespace Gameplay
     public class CoreGameplayScript : MonoBehaviour
     {
         [SerializeField] private CityMover _cityMover;
-        private PlayerInputActions _controls;
+        private PlayerInputActions _playerInputActions;
         private TileTracker _tileTracker;
 
         [Inject]
-        private void Init(TileTracker tileTracker)
+        private void Init(TileTracker tileTracker, PlayerInputActions playerInputActions)
         {
             _tileTracker = tileTracker;
-        }
-
-        private void Awake()
-        {
-            _controls = new PlayerInputActions();
+            _playerInputActions = playerInputActions;
         }
 
         private void OnEnable()
         {
-            _controls.Gameplay.Enable();
-            _controls.Gameplay.Turn.performed += OnRotate;
+            _playerInputActions.Gameplay.Enable();
+            _playerInputActions.Gameplay.Turn.performed += OnRotate;
         }
 
         private void OnDisable()
         {
-            _controls.Gameplay.Turn.performed -= OnRotate;
-            _controls.Gameplay.Disable();
+            _playerInputActions.Gameplay.Turn.performed -= OnRotate;
+            _playerInputActions.Gameplay.Disable();
         }
         private void OnRotate(InputAction.CallbackContext context)
         {

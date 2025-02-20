@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3bd33e9dfa81c14dad5930afcc1599f, type: 3}
   m_Name: JumpSettings
   m_EditorClassIdentifier: 
-  jumpHeight: 4
+  jumpHeight: 2
   jumpTimeToApex: 0.3
   jumpInputBufferTime: 0.133
   coyoteTime: 0.024
-  jumpForce: 26.666666
-  gravityStrength: -88.888885
-  fallGravityScale: 0.175
+  jumpForce: 13.333333
+  gravityStrength: -44.444443
+  fallGravityScale: -0.184
   jumpCutGravityScale: 0.195
   maxFallSpeed: 20
   jumpHangGravityMult: 0.9
